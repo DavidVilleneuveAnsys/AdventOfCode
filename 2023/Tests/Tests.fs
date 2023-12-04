@@ -137,4 +137,4 @@ let ``Day 4 star 1 test Data`` () =
 [<Fact>] 
 let ``Day 4 star 2 test Data`` () =
     let result = Day4.RunStarTwo @".\ValidationData4-2.txt"
-    Assert.Equal(30, result)
+    Assert.Equal(60, result)
