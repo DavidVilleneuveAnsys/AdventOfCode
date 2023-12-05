@@ -6,22 +6,26 @@ open Xunit
 
 //===========================Day 2 ===============================
 [<Fact>]
+[<Trait("Category","Day 2")>]
 let ``Day 2 star 1 test Data`` () =
     let result = Day2.RunStarOne @".\ValidationData1.txt"
     Assert.Equal(8, result)
 
 [<Fact>]
+[<Trait("Category","Day 2")>]
 let ``Day 2 star 2 test Data`` () =
     let result = Day2.RunStarTwo @".\ValidationData2.txt"
     Assert.Equal(2286, result)
 
 [<Fact>]
+[<Trait("Category","Day 2")>]
 let ``Test architecture test`` () =
     Assert.All(Day2.ReadData @".\testData.txt"
                |> Seq.toList,
                fun x -> Assert.Equal(x,"test"))
     
 [<Fact>]
+[<Trait("Category","Day 2")>]
 let ``test is possible`` () =
     let data = Day2.Game(0,1,2,3)
     Assert.True(data.IsPossible(1,2,3))
@@ -34,27 +38,32 @@ let ``test is possible`` () =
 
 
 //======================================= Day 3 ===============================
-[<Fact>] 
+[<Fact>]
+[<Trait("Category","Day 3")>]
 let ``Day 3 star 1 test Data`` () =
     let result = Day3.RunStarOne @".\ValidationData3-1.txt"
     Assert.Equal(4361, result)
     
-[<Fact>] 
+[<Fact>]
+[<Trait("Category","Day 3")>]
 let ``Day 3 star 1 test Data2`` () =
     let result = Day3.RunStarOne @".\ValidationData3-1.2.txt"
     Assert.Equal(15634, result)
 
-[<Fact>] 
+[<Fact>]
+[<Trait("Category","Day 3")>]
 let ``Day 3 star 1 test Data3`` () =
     let result = Day3.RunStarOne @".\ValidationData3-1.3.txt"
     Assert.Equal(6463, result)
 
-[<Fact>]    
+[<Fact>]
+[<Trait("Category","Day 3")>]
 let ``Day 3 star 2 test Data`` () =
     let result = Day3.RunStarTwo @".\ValidationData3-2.txt"
     Assert.Equal(467835, result)
     
 [<Fact>]
+[<Trait("Category","Day 3")>]
 let ``Get Symbols And Numbers From line`` () =
     let result = Day3.GetSymbolsAndNumbersFromLine ".........@....109$...*..........988........$..241..750.............@............169...162......*...%....575.743......*..................278." 5
     let expected = seq {
@@ -79,6 +88,7 @@ let ``Get Symbols And Numbers From line`` () =
     Assert.Equal(expected |> Seq.toList, result)
     
 [<Fact>]
+[<Trait("Category","Day 3")>]
 let ``Get Symbols And Numbers From line2`` () =
     let result = Day3.GetSymbolsAndNumbersFromLine "..863.%..920..*152..852*387..990..563.*.*.629..772.912.283." 5
     let expected = seq {
@@ -102,6 +112,7 @@ let ``Get Symbols And Numbers From line2`` () =
     Assert.Equal(expected |> Seq.toList, result)
     
 [<Fact>]
+[<Trait("Category","Day 3")>]
 let ``Get Symbols And Numbers From line3`` () =
     let result = Day3.GetSymbolsAndNumbersFromLine "4." 5
     let expected = seq {
@@ -111,6 +122,7 @@ let ``Get Symbols And Numbers From line3`` () =
     
     
 [<Fact>]
+[<Trait("Category","Day 3")>]
 let ``Get Symbols And Numbers From line5`` () =
     let result = Day3.GetSymbolsAndNumbersFromLine "4" 5
     let expected = seq {
@@ -119,6 +131,7 @@ let ``Get Symbols And Numbers From line5`` () =
     Assert.Equal(expected |> Seq.toList, result)
 
 [<Fact>]
+[<Trait("Category","Day 3")>]
 let ``Get Symbols And Numbers From line4`` () =
     let result = Day3.GetSymbolsAndNumbersFromLine "%." 5
     let expected = seq {
@@ -128,13 +141,47 @@ let ``Get Symbols And Numbers From line4`` () =
 
 //======================================= Day 4 ==============================
 
-[<Fact>] 
+[<Fact>]
+[<Trait("Category","Day 4")>]
 let ``Day 4 star 1 test Data`` () =
     let result = Day4.RunStarOne @".\ValidationData4-1.txt"
     Assert.Equal(13, result)
     
 
-[<Fact>] 
+[<Fact>]
+[<Trait("Category","Day 4")>]
 let ``Day 4 star 2 test Data`` () =
     let result = Day4.RunStarTwo @".\ValidationData4-2.txt"
     Assert.Equal(60, result)
+    
+[<Fact>]
+[<Trait("Category","Day 5")>]
+let ``Day 5 star 1 test Data`` () =
+    let result = Day5.RunStarOne @".\ValidationData5-1.txt"
+    Assert.Equal(35, result)
+    
+
+[<Fact>]
+[<Trait("Category","Day 5")>]
+let ``Day 5 star 2 test Data`` () =
+    let result = Day5.RunStarTwo @".\ValidationData5-2.txt"
+    Assert.Equal(0, result)
+
+[<Fact>]
+[<Trait("Category","Day 5")>]    
+let ``Day 5 test mapping is in range`` () =
+    let mapping = Day5.Mapping(98, 50, 2)
+    Assert.True(mapping.IsInRange 98)
+    Assert.True(mapping.IsInRange 99)
+    Assert.False(mapping.IsInRange 100)
+    Assert.False(mapping.IsInRange 97)
+    Assert.False(mapping.IsInRange 50)
+    Assert.False(mapping.IsInRange 51)
+
+[<Fact>]
+[<Trait("Category","Day 5")>]    
+let ``Day 5 test mapping map values`` () =
+    let mapping1 = Day5.Mapping(98, 50, 2)
+    let mapping2 = Day5.Mapping(50, 52, 2)
+    let value = mapping1.MapValue 5
+ 
