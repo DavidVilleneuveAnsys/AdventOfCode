@@ -182,6 +182,52 @@ let ``Day 5 test mapping is in range`` () =
 [<Trait("Category","Day 5")>]    
 let ``Day 5 test mapping map values`` () =
     let mapping1 = Day5.Mapping(98, 50, 2)
-    let mapping2 = Day5.Mapping(50, 52, 2)
-    let value = mapping1.MapValue 5
+    let mapping2 = Day5.Mapping(50, 52, 48)
+    // testing mapping 1
+    Assert.Throws(fun () ->
+        mapping1.MapValue(5)|> ignore) |> ignore
+    Assert.Equal(50,mapping1.MapValue 98)
+    Assert.Equal(51,mapping1.MapValue 99)
+    Assert.Throws(fun () ->
+        mapping1.MapValue(97)|> ignore) |> ignore
+    Assert.Throws(fun () ->
+        mapping1.MapValue(100)|> ignore) |> ignore
+    
+    // testing mapping 2
+    Assert.Throws(fun () ->
+        mapping2.MapValue(5)|> ignore) |> ignore
+    Assert.Equal(52,mapping2.MapValue 50)
+    Assert.Equal(99,mapping2.MapValue 97)
+    Assert.Throws(fun () ->
+        mapping2.MapValue(98)|> ignore) |> ignore
+    Assert.Throws(fun () ->
+        mapping2.MapValue(49)|> ignore) |> ignore
+    
+[<Fact>]
+[<Trait("Category","Day 5")>]    
+let ``Day 5 use mapping to convert numbers`` () =
+    let maps = seq {
+        yield Day5.Mapping(98, 50, 2)
+        yield Day5.Mapping(50, 52, 48)
+    }
+    Assert.Equal(81,Day5.ConvertNumberUsingMappings maps 79)
+    Assert.Equal(14,Day5.ConvertNumberUsingMappings maps 14)
+    Assert.Equal(57,Day5.ConvertNumberUsingMappings maps 55)
+    Assert.Equal(13,Day5.ConvertNumberUsingMappings maps 13)
+    Assert.Equal(51,Day5.ConvertNumberUsingMappings maps 99)
+    
+[<Fact>]
+[<Trait("Category","Day 5")>]    
+let ``Day 5 read mappings`` () =
+    let lines = seq {
+        yield "50 98 2"
+        yield "52 50 48"
+    }
+    
+    let expectedMappings = seq {
+        yield Day5.Mapping(98, 50, 2)
+        yield Day5.Mapping(50, 52, 48)
+    }
+    Assert.Equal(expectedMappings|> Seq.toList, Day5.ReadMapping lines)
+    
  
