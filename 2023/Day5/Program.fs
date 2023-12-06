@@ -15,7 +15,7 @@ module Day5 =
     type Overlap =
        | NoOverlap = 0
        | Contained = 1
-       | OverlapStart = 1
+       | OverlapStart = 2
        | OverlapEnd = 3
        
     
@@ -88,7 +88,9 @@ module Day5 =
         // parse the other line to generate multiple sequence from mappings
         let mappings = CreateMappingsFromLines lines
         ApplyMappingsOnSeeds seeds mappings
-        
+    
+    
+    // bad brute-force implementation that takes for ever    
     let MapAllSeedsToLocation(lines:seq<string>) : seq<int64> =
         let GetAllNumbersRegex = Regex(@"\d+", RegexOptions.Compiled)
         // Get the first line, it represents the seeds
@@ -105,31 +107,74 @@ module Day5 =
         // parse the other line to generate multiple sequence from mappings
         let mappings = CreateMappingsFromLines lines
         ApplyMappingOnSeedsParallel allSeeds mappings
-        
-    let MapAllSeedsToLocation2(lines:seq<string>)   = 
+    
+    let TransformRangeWithMapping (min:int64,max:int64) (mapping:Mapping) : seq<int64 * int64> =
+        match mapping.RangeOverlapsMapping (min,max) with
+        | Overlap.NoOverlap -> seq{(min,max)}
+        | Overlap.Contained -> seq{(mapping.MapValue min, mapping.MapValue max)}
+        | Overlap.OverlapEnd ->
+            let mappedMin = mapping.MapValue min
+            let maxMappedRange = mapping.Destination + mapping.Range
+            let mappedRangeSize = maxMappedRange - mappedMin
+            seq{
+                (mappedMin, maxMappedRange)
+                (min+mappedRangeSize, max)
+            }            
+        | _ ->
+            let mappedMax = mapping.MapValue max
+            let minMappedRange = mapping.Destination
+            let mappedRangeSize = minMappedRange - mappedMax
+            seq{
+                (min, min+mappedRangeSize)
+                (minMappedRange, mappedMax)
+            }
+    
+    
+    let TransformRangeWithMappings (min:int64,max:int64) (mappings:seq<seq<Mapping>>) : seq<int64 * int64> =
+        let firstElement = seq{ (min,max) }
+        (firstElement, mappings) ||> Seq.fold(fun acc currentMapping ->
+                                                    let ranges = seq{
+                                                        for r in acc do
+                                                            let newRanges = currentMapping |> Seq.map( fun m -> TransformRangeWithMapping r m) |> Seq.concat
+                                                            for nr in newRanges do
+                                                                yield nr
+                                                    } 
+                                                    ranges |> Seq.sortBy(fun x ->
+                                                                                let (min,_) = x
+                                                                                min)
+                                                    )
+    
+    let GetAllRanges (ranges:seq<int64*int64>) (mappings:seq<seq<Mapping>>) : seq<int64 * int64> =
+        ranges |> Seq.map(fun x -> TransformRangeWithMappings x mappings) |> Seq.concat
+     
+    let MapAllSeedsToLocation2(lines:seq<string>) : seq<int64*int64>  = 
         let GetAllNumbersRegex = Regex(@"\d+", RegexOptions.Compiled)
         // Get the first line, it represents the seeds
         let seeds = lines |> Seq.take(1) |> Seq.head |> GetAllNumbersRegex.Matches |> Seq.map(fun x -> x.Value |> int64)
         let seedsAndRange = seeds |> Seq.indexed |> Seq.toArray |> Array.partition(fun x ->
                                                                 let (i,_) = x
                                                                 i % 2 = 0 )
+        let mappings = CreateMappingsFromLines lines
         let seedRange = seq{
             for i in seedsAndRange ||> Array.zip do
                 let (_,seed),(_,range) = i
-                yield seed
-                yield seed+range
+                yield (seed, seed+range)
         }
-        let seedRangeArray = seedRange |> Seq.toArray
-        let mappings = CreateMappingsFromLines lines
-        let rangeMapping = ApplyMappingsOnSeeds seedRangeArray mappings |> Seq.toArray
-        for i in 0 .. 2 .. rangeMapping.Length do
-            if rangeMapping[i+1] - rangeMapping[0] > seedRangeArray[i+1] then
-                failwith "found mapping is bigger that original mapping"
+        let sortedSeeds = seedRange |> Seq.sortBy(fun x ->
+                                                    let (min,_) = x
+                                                    min)
+        
+        GetAllRanges sortedSeeds mappings
+        
         
     let RunStarOne (filePath:string) : int64 =
         ReadData filePath |> MapSeedsToLocation |> Seq.min 
     let RunStarTwo (filePath:string) : int64 =
-        ReadData filePath |> MapAllSeedsToLocation |> Seq.min 
+        ReadData filePath   |> MapAllSeedsToLocation2
+                            |> Seq.map(fun x ->
+                                            let (min, _) = x
+                                            min)
+                            |> Seq.min
         
     
 
