@@ -9,4 +9,16 @@
         <Compile Include="Program.fs"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <Content Include="MyData.txt">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <Content Include="ValidationData5-1.txt">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <Content Include="ValidationData5-2.txt">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+    </ItemGroup>
+
 </Project>

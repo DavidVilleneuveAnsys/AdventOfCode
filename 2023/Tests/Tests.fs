@@ -158,14 +158,14 @@ let ``Day 4 star 2 test Data`` () =
 [<Trait("Category","Day 5")>]
 let ``Day 5 star 1 test Data`` () =
     let result = Day5.RunStarOne @".\ValidationData5-1.txt"
-    Assert.Equal(35, result)
+    Assert.Equal(35 |> int64, result)
     
 
 [<Fact>]
 [<Trait("Category","Day 5")>]
 let ``Day 5 star 2 test Data`` () =
     let result = Day5.RunStarTwo @".\ValidationData5-2.txt"
-    Assert.Equal(0, result)
+    Assert.Equal(46 |> int64, result)
 
 [<Fact>]
 [<Trait("Category","Day 5")>]    
@@ -186,8 +186,8 @@ let ``Day 5 test mapping map values`` () =
     // testing mapping 1
     Assert.Throws(fun () ->
         mapping1.MapValue(5)|> ignore) |> ignore
-    Assert.Equal(50,mapping1.MapValue 98)
-    Assert.Equal(51,mapping1.MapValue 99)
+    Assert.Equal(50|>int64,mapping1.MapValue 98)
+    Assert.Equal(51|>int64,mapping1.MapValue 99)
     Assert.Throws(fun () ->
         mapping1.MapValue(97)|> ignore) |> ignore
     Assert.Throws(fun () ->
@@ -196,8 +196,8 @@ let ``Day 5 test mapping map values`` () =
     // testing mapping 2
     Assert.Throws(fun () ->
         mapping2.MapValue(5)|> ignore) |> ignore
-    Assert.Equal(52,mapping2.MapValue 50)
-    Assert.Equal(99,mapping2.MapValue 97)
+    Assert.Equal(52|>int64,mapping2.MapValue 50)
+    Assert.Equal(99|>int64,mapping2.MapValue 97)
     Assert.Throws(fun () ->
         mapping2.MapValue(98)|> ignore) |> ignore
     Assert.Throws(fun () ->
@@ -210,11 +210,11 @@ let ``Day 5 use mapping to convert numbers`` () =
         yield Day5.Mapping(98, 50, 2)
         yield Day5.Mapping(50, 52, 48)
     }
-    Assert.Equal(81,Day5.ConvertNumberUsingMappings maps 79)
-    Assert.Equal(14,Day5.ConvertNumberUsingMappings maps 14)
-    Assert.Equal(57,Day5.ConvertNumberUsingMappings maps 55)
-    Assert.Equal(13,Day5.ConvertNumberUsingMappings maps 13)
-    Assert.Equal(51,Day5.ConvertNumberUsingMappings maps 99)
+    Assert.Equal(81|>int64,Day5.ConvertNumberUsingMappings maps 79)
+    Assert.Equal(14|>int64,Day5.ConvertNumberUsingMappings maps 14)
+    Assert.Equal(57|>int64,Day5.ConvertNumberUsingMappings maps 55)
+    Assert.Equal(13|>int64,Day5.ConvertNumberUsingMappings maps 13)
+    Assert.Equal(51|>int64,Day5.ConvertNumberUsingMappings maps 99)
     
 [<Fact>]
 [<Trait("Category","Day 5")>]    
@@ -228,6 +228,14 @@ let ``Day 5 read mappings`` () =
         yield Day5.Mapping(98, 50, 2)
         yield Day5.Mapping(50, 52, 48)
     }
-    Assert.Equal(expectedMappings|> Seq.toList, Day5.ReadMapping lines)
+    Assert.Equal(expectedMappings|> Seq.toList, Day5.ReadMapping (lines |> Seq.toArray))
     
- 
+[<Fact>]
+[<Trait("Category","Day 5")>]    
+let ``Day 5 test mapping mapping overlaps`` () =
+    let mapping = Day5.Mapping(98, 50, 2)
+    Assert.Equal(Day5.Overlap.NoOverlap,mapping.RangeOverlapsMapping (10,15))
+    Assert.Equal(Day5.Overlap.Contained,mapping.RangeOverlapsMapping (98,99))
+    Assert.Equal(Day5.Overlap.OverlapStart,mapping.RangeOverlapsMapping (95,98))
+    Assert.Equal(Day5.Overlap.OverlapEnd,mapping.RangeOverlapsMapping (99,120))
+    
