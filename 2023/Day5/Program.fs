@@ -17,6 +17,7 @@ module Day5 =
        | Contained = 1
        | OverlapStart = 2
        | OverlapEnd = 3
+       | Encompasses = 4
        
     
     type Mapping =
@@ -41,6 +42,7 @@ module Day5 =
                     | true when endInRange = true -> Overlap.Contained
                     | true when endInRange = false -> Overlap.OverlapEnd
                     | false when endInRange = true -> Overlap.OverlapStart
+                    | false when endInRange = false && start < this.Source && max > (this.Source+this.Range-int64(1)) -> Overlap.Encompasses
                     | _ -> Overlap.NoOverlap
         end
     
@@ -114,19 +116,29 @@ module Day5 =
         | Overlap.Contained -> seq{(mapping.MapValue min, mapping.MapValue max)}
         | Overlap.OverlapEnd ->
             let mappedMin = mapping.MapValue min
-            let maxMappedRange = mapping.Destination + mapping.Range
-            let mappedRangeSize = maxMappedRange - mappedMin
+            let maxMappedValue = mapping.MapValue (mapping.Source + mapping.Range - int64(1))
+            let mappedRangeSize = maxMappedValue - mappedMin
             seq{
-                (mappedMin, maxMappedRange)
-                (min+mappedRangeSize, max)
+                (mappedMin, maxMappedValue)
+                (min+mappedRangeSize+int64(1), max)
             }            
-        | _ ->
+        | Overlap.OverlapStart ->
             let mappedMax = mapping.MapValue max
-            let minMappedRange = mapping.Destination
-            let mappedRangeSize = minMappedRange - mappedMax
+            let minMappedRange = mapping.Source - int64(1)
+            let mappedRangeStart = mapping.MapValue mapping.Source
             seq{
-                (min, min+mappedRangeSize)
-                (minMappedRange, mappedMax)
+                (min, minMappedRange)
+                (mappedRangeStart, mappedMax)
+            }
+        | Overlap.Encompasses ->
+            let minMappedRange = mapping.Source - int64(1)
+            let mappedRangeStart = mapping.MapValue mapping.Source
+            let highestSourceValue = mapping.Source + mapping.Range - int64(1)
+            let mappedRangeEnd = mapping.MapValue highestSourceValue
+            seq{
+                (min, minMappedRange)
+                (mappedRangeStart, mappedRangeEnd)
+                (highestSourceValue+int64(1), max)
             }
     
     
@@ -135,9 +147,33 @@ module Day5 =
         (firstElement, mappings) ||> Seq.fold(fun acc currentMapping ->
                                                     let ranges = seq{
                                                         for r in acc do
-                                                            let newRanges = currentMapping |> Seq.map( fun m -> TransformRangeWithMapping r m) |> Seq.concat
+                                                            let newRanges = currentMapping  |> Seq.map( fun m -> TransformRangeWithMapping r m)
+                                                                                            |> Seq.concat
+                                                            let (rn,rx) = r
+                                                            let rangeSize = rx-rn
+                                                            let mutable numberOfValuesSent = int64(0)
+                                                            let mutable unchangedMaps = List.empty
                                                             for nr in newRanges do
-                                                                yield nr
+                                                                let (min , max) = nr
+                                                                let currentRangeSize = max-min
+                                                                if min >= rn && max <= rx then
+                                                                    unchangedMaps <- unchangedMaps |>List.append [nr]
+                                                                else
+                                                                    numberOfValuesSent <- (numberOfValuesSent + currentRangeSize)
+                                                                    yield nr
+                                                            if numberOfValuesSent < rangeSize then
+                                                                let amountOfMissingItems = rangeSize - numberOfValuesSent
+                                                                let unMappedRange = unchangedMaps |> List.tryPick(fun x ->
+                                                                                                        let (s,e) = x
+                                                                                                        if amountOfMissingItems = e-s then
+                                                                                                            Some(x)
+                                                                                                        else
+                                                                                                             None
+                                                                                                        )
+                                                                match unMappedRange with
+                                                                | Some(unMappedRange) -> yield unMappedRange
+                                                                | None -> ()
+                                                         
                                                     } 
                                                     ranges |> Seq.sortBy(fun x ->
                                                                                 let (min,_) = x

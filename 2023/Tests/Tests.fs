@@ -239,3 +239,73 @@ let ``Day 5 test mapping mapping overlaps`` () =
     Assert.Equal(Day5.Overlap.OverlapStart,mapping.RangeOverlapsMapping (95,98))
     Assert.Equal(Day5.Overlap.OverlapEnd,mapping.RangeOverlapsMapping (99,120))
     
+[<Fact>]
+[<Trait("Category","Day 5")>]    
+let ``Day 5 Map ranges Contained`` () =
+    let mapping = Day5.Mapping(50, 52, 48)
+    let inputRange = (int64(79),int64(93))
+    let expected = seq{
+        (int64(81),int64(95))
+    }
+    
+    let result = Day5.TransformRangeWithMapping inputRange mapping
+    (expected, result) ||> Seq.iter2(fun x y -> Assert.Equal(x,y) )
+
+[<Fact>]
+[<Trait("Category","Day 5")>]    
+let ``Day 5 Map ranges End Overlaps`` () =
+    let mapping = Day5.Mapping(50, 52, 48)
+    let inputRange = (int64(52),int64(99))
+    let expected = seq{
+        (int64(54),int64(99))
+        (int64(98),int64(99))
+    }
+    
+    let result = Day5.TransformRangeWithMapping inputRange mapping
+    (expected, result) ||> Seq.iter2(fun x y -> Assert.Equal(x,y) )
+    
+[<Fact>]
+[<Trait("Category","Day 5")>]    
+let ``Day 5 Map ranges Start Overlaps`` () =
+    let mapping = Day5.Mapping(50, 52, 48)
+    let inputRange = (int64(45),int64(60))
+    let expected = seq{
+        (int64(45),int64(49))
+        (int64(52),int64(62))
+    }
+    
+    let result = Day5.TransformRangeWithMapping inputRange mapping
+    (expected, result) ||> Seq.iter2(fun x y -> Assert.Equal(x,y) )
+    
+[<Fact>]
+[<Trait("Category","Day 5")>]    
+let ``Day 5 Map ranges Encompasses`` () =
+    let mapping = Day5.Mapping(50, 52, 48)
+    let inputRange = (int64(45),int64(99))
+    let expected = seq{
+        (int64(45),int64(49))
+        (int64(52),int64(99))
+        (int64(98),int64(99))
+    }
+    
+    let result = Day5.TransformRangeWithMapping inputRange mapping
+    (expected, result) ||> Seq.iter2(fun x y -> Assert.Equal(x,y) )
+    
+[<Fact>]
+[<Trait("Category","Day 5")>]    
+let ``Day 5 Map ranges multipleMappings`` () =
+    let mappings =
+        seq{
+            seq{
+                Day5.Mapping(98, 50, 2)
+                Day5.Mapping(50, 52, 48)
+            }
+        }
+    let inputRange = (int64(79),int64(99))
+    let expected = seq{
+        (int64(50),int64(51))
+        (int64(81),int64(97))
+    }
+    
+    let result = Day5.TransformRangeWithMappings inputRange mappings
+    (expected, result) ||> Seq.iter2(fun x y -> Assert.Equal(x,y) )
