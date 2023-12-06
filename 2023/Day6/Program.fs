@@ -12,37 +12,42 @@ module Day6 =
     }
     
     // well that is technically dumb
-    let GetDistancePerPressingTime (pressingTime:int) (totalTime:int) : int =
+    let GetDistancePerPressingTime (pressingTime:int64) (totalTime:int64) : int64 =
         let speed = pressingTime
         let remainingTime = totalTime - pressingTime
         speed*remainingTime
     
-    let IsRaceResultValid(raceResult:int*int) (distanceToBeat:int) : bool =
+    let IsRaceResultValid(raceResult:int64*int64) (distanceToBeat:int64) : bool =
         match raceResult with
         | (pressingTime, givenDistance) when givenDistance > distanceToBeat -> true
         | _ -> false
     
-    let NumberOfWinningCases(time:int) (distance:int) : int =
+    let NumberOfWinningCases(time:int64) (distance:int64) : int64 =
         let possibleDistances =  seq {
-            for i in 0..time do
+            for i in int64(0)..time do
                 yield (i, GetDistancePerPressingTime i time)
         }
         let (lowerBound,_) = possibleDistances |> Seq.find(fun x -> IsRaceResultValid x distance)
         let (upperBound,_) = possibleDistances |> Seq.findBack(fun x -> IsRaceResultValid x distance)
-        (upperBound - lowerBound)+1
+        (upperBound - lowerBound)+int64(1)
         
     
-    let RunStarOne (filePath:string) : int =
+    let RunStarOne (filePath:string) : int64 =
         let rx = Regex(@"\d+", RegexOptions.Compiled)
         let data = ReadData filePath
-        let times = data |> Seq.head |> rx.Matches |> Seq.map(fun x -> x.Value |> int)
-        let distances = data |> Seq.last |> rx.Matches |> Seq.map(fun x -> x.Value |> int)
+        let times = data |> Seq.head |> rx.Matches |> Seq.map(fun x -> x.Value |> int64)
+        let distances = data |> Seq.last |> rx.Matches |> Seq.map(fun x -> x.Value |> int64)
         let timesAndDistances = (times, distances) ||> Seq.zip 
         timesAndDistances |> Seq.map(fun x -> match x with
                                                 | (time, distance) -> NumberOfWinningCases time distance)
                           |> Seq.reduce(fun x y -> x*y)
     
-    let RunStarTwo (filePath:string) : int = 0 
+    let RunStarTwo (filePath:string) : int64 =
+        let rx = Regex(@"\d+", RegexOptions.Compiled)
+        let data = ReadData filePath
+        let time = data |> Seq.head |> String.filter(fun x -> x |> Char.IsNumber) |> int64
+        let distance = data |> Seq.last |> String.filter(fun x -> x |> Char.IsNumber) |> int64
+        NumberOfWinningCases time distance
         
     
 
