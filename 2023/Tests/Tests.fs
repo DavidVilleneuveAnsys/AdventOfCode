@@ -315,14 +315,14 @@ let ``Day 5 Map ranges multipleMappings`` () =
 [<Trait("Category","Day 6")>]
 let ``Day 6 star 1 test Data`` () =
     let result = Day6.RunStarOne @".\ValidationData6-1.txt"
-    Assert.Equal(288, result)
+    Assert.Equal(int64(288), result)
     
 
 [<Fact>]
 [<Trait("Category","Day 6")>]
 let ``Day 6 star 2 test Data`` () =
     let result = Day6.RunStarTwo @".\ValidationData6-2.txt"
-    Assert.Equal(71503, result)
+    Assert.Equal(int64(71503), result)
 
 [<Fact>]
 [<Trait("Category","Day 7")>]

@@ -23,12 +23,20 @@ module Day6 =
         | _ -> false
     
     let NumberOfWinningCases(time:int64) (distance:int64) : int64 =
+        
         let possibleDistances =  seq {
             for i in int64(0)..time do
                 yield (i, GetDistancePerPressingTime i time)
         }
+        // for the sake of generating smaller lists/going faster we have two list, one that starts from the end and the other from the start
+        // it was my original intent, but it turns out that F# doesn't do magic, and so to do findBack, it generates the whole list
+        // execution time when from a few seconds to ms
+        let reversedPossibleDistances =  seq {
+            for i in time..int64(-1)..int64(0) do
+                yield (i, GetDistancePerPressingTime i time)
+        }
         let (lowerBound,_) = possibleDistances |> Seq.find(fun x -> IsRaceResultValid x distance)
-        let (upperBound,_) = possibleDistances |> Seq.findBack(fun x -> IsRaceResultValid x distance)
+        let (upperBound,_) = reversedPossibleDistances |> Seq.find(fun x -> IsRaceResultValid x distance)
         (upperBound - lowerBound)+int64(1)
         
     
