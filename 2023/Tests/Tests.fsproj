@@ -30,6 +30,8 @@
       <ProjectReference Include="..\Day3\Day3.fsproj" />
       <ProjectReference Include="..\Day4\Day4.fsproj" />
       <ProjectReference Include="..\Day5\Day5.fsproj" />
+      <ProjectReference Include="..\Day6\Day6.fsproj" />
+      <ProjectReference Include="..\Day7\Day7.fsproj" />
     </ItemGroup>
 
 </Project>

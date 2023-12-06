@@ -309,3 +309,30 @@ let ``Day 5 Map ranges multipleMappings`` () =
     
     let result = Day5.TransformRangeWithMappings inputRange mappings
     (expected, result) ||> Seq.iter2(fun x y -> Assert.Equal(x,y) )
+    
+
+[<Fact>]
+[<Trait("Category","Day 6")>]
+let ``Day 6 star 1 test Data`` () =
+    let result = Day6.RunStarOne @".\ValidationData6-1.txt"
+    Assert.Equal(0, result)
+    
+
+[<Fact>]
+[<Trait("Category","Day 6")>]
+let ``Day 6 star 2 test Data`` () =
+    let result = Day6.RunStarTwo @".\ValidationData6-2.txt"
+    Assert.Equal(0, result)
+
+[<Fact>]
+[<Trait("Category","Day 7")>]
+let ``Day 7 star 1 test Data`` () =
+    let result = Day7.RunStarOne @".\ValidationData7-1.txt"
+    Assert.Equal(0, result)
+    
+
+[<Fact>]
+[<Trait("Category","Day 7")>]
+let ``Day 7 star 2 test Data`` () =
+    let result = Day7.RunStarTwo @".\ValidationData7-2.txt"
+    Assert.Equal(0, result)
