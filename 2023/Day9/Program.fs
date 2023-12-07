@@ -3,7 +3,7 @@ open System.IO
 open System.Collections.Generic
 open System.Text.RegularExpressions
 
-module Day8 =
+module Day9 =
     
     let ReadData (filePath:string) = seq {
         use sr = new StreamReader (filePath)
@@ -17,6 +17,5 @@ module Day8 =
         
     
 
-Day8.RunStarOne @".\MyData.txt" |> printfn "Star One [%i]"
-Day8.RunStarTwo @".\MyData.txt" |> printfn "Star Two [%i]"
-    
+Day9.RunStarOne @".\MyData.txt" |> printfn "Star One [%i]"
+Day9.RunStarTwo @".\MyData.txt" |> printfn "Star Two [%i]"
