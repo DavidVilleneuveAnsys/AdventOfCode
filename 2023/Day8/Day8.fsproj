@@ -7,13 +7,13 @@
 
     <ItemGroup>
       <Compile Include="Program.fs" />
-      <Content Include="ValidationData7-2.txt">
+      <Content Include="ValidationData8-2.txt">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
       <Content Include="MyData.txt">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
-      <Content Include="ValidationData7-1.txt">
+      <Content Include="ValidationData8-1.txt">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
     </ItemGroup>

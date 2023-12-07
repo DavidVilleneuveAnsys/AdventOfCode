@@ -68,6 +68,8 @@ module Day7 =
                 match numberOfFirstElement with
                 | 1 -> Some(HandType.FourOfAKind)
                 | 2 -> Some(HandType.FullHouse)
+                | 3 -> Some(HandType.FullHouse)
+                | 4 -> Some(HandType.FourOfAKind)
                 | _ -> None
                 
             member this.ThreeOfAKindOrTwoPairs(distinctCards:array<CardType>) : Option<HandType> =
@@ -89,6 +91,7 @@ module Day7 =
                 match numberOfFirstElement with
                 // when there are two elements that are different out of three we're sure it's a three of a kind
                 | 1 when numberOfSecondElement = 1 -> Some(HandType.ThreeOfAKind)
+                | 1 when numberOfSecondElement = 2 -> Some(HandType.TwoPair)
                 | 2 when numberOfSecondElement = 2 -> Some(HandType.TwoPair)
                 | 2 when numberOfSecondElement = 1 -> Some(HandType.TwoPair)
                 | 3 -> Some(HandType.ThreeOfAKind)
@@ -131,6 +134,7 @@ module Day7 =
         end
     
     let RunStarOne (filePath:string) : int =
+        let test = ReadData filePath
         ReadData filePath |> Seq.map(fun x ->
                                             let splitLine = x.Split(' ')
                                             match splitLine with
