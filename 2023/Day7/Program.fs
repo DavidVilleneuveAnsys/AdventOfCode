@@ -165,19 +165,19 @@ module Day7 =
                                                         acc)
             
             member this.FourOfAKindOrFullHouse(distinctCards:array<CardType>) : Option<HandType> =
-                let searchedCard = distinctCards |> Array.head
+                let searchedCard = distinctCards |> Array.find(fun x -> not (x = CardType.Joker))
                 let numberOfFirstElement = this.GetNumberOfThisCard searchedCard
                 let containsJoker = distinctCards |> Array.contains(CardType.Joker)
                 match numberOfFirstElement with
                 | 1 -> Some(HandType.FourOfAKind)
-                | 2 when not containsJoker -> Some(HandType.FullHouse)
+                | 2  -> Some(HandType.FullHouse)
                 | 3 when not containsJoker -> Some(HandType.FullHouse)
                 | 4 -> Some(HandType.FourOfAKind)
                 | _ -> Some(HandType.FourOfAKind) // joker kind return the best
             
             member this.ThreeOfAKindOrTwoPairs(distinctCards:array<CardType>) : Option<HandType> =
-                let firstSearchedCard = distinctCards |> Array.head
-                let secondSearchedCard = distinctCards |> Array.skip(1) |> Array.head
+                let firstSearchedCard = distinctCards |> Array.find(fun x -> not (x = CardType.Joker))
+                let secondSearchedCard = distinctCards |> Array.skip(1) |> Array.find(fun x -> not (x = CardType.Joker))
                 // to refactor some day
                 let numberOfFirstElement = this.GetNumberOfThisCard firstSearchedCard
                 let numberOfSecondElement = this.GetNumberOfThisCard secondSearchedCard

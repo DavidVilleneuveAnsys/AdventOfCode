@@ -384,6 +384,27 @@ let ``Day 7 star 1 test get Hand types jokers works FourOfAKind`` () =
     Assert.Equal(Day7.HandType.FourOfAKind, hand3.GetHandType)
     let hand3 = Day7.HandWithJoker(0,"JJJ2A")
     Assert.Equal(Day7.HandType.FourOfAKind, hand3.GetHandType)
+    let hand3 = Day7.HandWithJoker(0,"JJA33")
+    Assert.Equal(Day7.HandType.FourOfAKind, hand3.GetHandType)
+
+[<Fact>]
+[<Trait("Category","Day 7")>]
+let ``Day 7 star 1 test get Hand types jokers works TreeOfAKind`` () =
+    let hand = Day7.HandWithJoker(0,"AAJ32")
+    Assert.Equal(Day7.HandType.ThreeOfAKind, hand.GetHandType)
+    let hand2 = Day7.HandWithJoker(0,"JAA23")
+    Assert.Equal(Day7.HandType.ThreeOfAKind, hand2.GetHandType)
+    let hand3 = Day7.HandWithJoker(0,"J23JA")
+    Assert.Equal(Day7.HandType.ThreeOfAKind, hand3.GetHandType)
+    
+[<Fact>]
+[<Trait("Category","Day 7")>]
+let ``Day 7 star 1 test get Hand types jokers works FullHouse`` () =
+    let hand = Day7.HandWithJoker(0,"AAJ22")
+    Assert.Equal(Day7.HandType.FullHouse, hand.GetHandType)
+    let hand2 = Day7.HandWithJoker(0,"JA3A3")
+    Assert.Equal(Day7.HandType.FullHouse, hand2.GetHandType)
+    
     
 [<Fact>]
 [<Trait("Category","Day 8")>]
