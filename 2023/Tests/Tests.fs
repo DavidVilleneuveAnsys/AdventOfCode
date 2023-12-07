@@ -328,11 +328,24 @@ let ``Day 6 star 2 test Data`` () =
 [<Trait("Category","Day 7")>]
 let ``Day 7 star 1 test Data`` () =
     let result = Day7.RunStarOne @".\ValidationData7-1.txt"
-    Assert.Equal(0, result)
+    Assert.Equal(6440, result)
     
 
 [<Fact>]
 [<Trait("Category","Day 7")>]
 let ``Day 7 star 2 test Data`` () =
     let result = Day7.RunStarTwo @".\ValidationData7-2.txt"
+    Assert.Equal(0, result)
+    
+[<Fact>]
+[<Trait("Category","Day 7")>]
+let ``Day 8 star 1 test Data`` () =
+    let result = Day8.RunStarOne @".\ValidationData7-1.txt"
+    Assert.Equal(0, result)
+    
+
+[<Fact>]
+[<Trait("Category","Day 7")>]
+let ``Day 8 star 2 test Data`` () =
+    let result = Day8.RunStarTwo @".\ValidationData7-2.txt"
     Assert.Equal(0, result)
