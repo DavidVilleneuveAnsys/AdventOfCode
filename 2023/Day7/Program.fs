@@ -148,8 +148,8 @@ module Day7 =
                                                                                             | '7' -> CardType.Seven
                                                                                             | '8' -> CardType.Eight
                                                                                             | '9' -> CardType.Nine
-                                                                                            | 'T' -> CardType.Joker
-                                                                                            | 'J' -> CardType.J
+                                                                                            | 'T' -> CardType.T
+                                                                                            | 'J' -> CardType.Joker
                                                                                             | 'Q' -> CardType.Q
                                                                                             | 'K' -> CardType.K
                                                                                             | 'A' -> CardType.A
@@ -167,10 +167,11 @@ module Day7 =
             member this.FourOfAKindOrFullHouse(distinctCards:array<CardType>) : Option<HandType> =
                 let searchedCard = distinctCards |> Array.head
                 let numberOfFirstElement = this.GetNumberOfThisCard searchedCard
+                let containsJoker = distinctCards |> Array.contains(CardType.Joker)
                 match numberOfFirstElement with
                 | 1 -> Some(HandType.FourOfAKind)
-                | 2 -> Some(HandType.FullHouse)
-                | 3 -> Some(HandType.FullHouse)
+                | 2 when not containsJoker -> Some(HandType.FullHouse)
+                | 3 when not containsJoker -> Some(HandType.FullHouse)
                 | 4 -> Some(HandType.FourOfAKind)
                 | _ -> Some(HandType.FourOfAKind) // joker kind return the best
             
@@ -180,12 +181,13 @@ module Day7 =
                 // to refactor some day
                 let numberOfFirstElement = this.GetNumberOfThisCard firstSearchedCard
                 let numberOfSecondElement = this.GetNumberOfThisCard secondSearchedCard
+                let containsJoker = distinctCards |> Array.contains(CardType.Joker)
                 match numberOfFirstElement with
                 // when there are two elements that are different out of three we're sure it's a three of a kind
                 | 1 when numberOfSecondElement = 1 -> Some(HandType.ThreeOfAKind)
-                | 1 when numberOfSecondElement = 2 -> Some(HandType.TwoPair)
-                | 2 when numberOfSecondElement = 2 -> Some(HandType.TwoPair)
-                | 2 when numberOfSecondElement = 1 -> Some(HandType.TwoPair)
+                | 1 when numberOfSecondElement = 2 && not containsJoker -> Some(HandType.TwoPair)
+                | 2 when numberOfSecondElement = 2 && not containsJoker -> Some(HandType.TwoPair)
+                | 2 when numberOfSecondElement = 1 && not containsJoker -> Some(HandType.TwoPair)
                 | 3 -> Some(HandType.ThreeOfAKind)
                 | _ when numberOfSecondElement = 3 -> Some(HandType.ThreeOfAKind)
                 | _ -> Some(HandType.ThreeOfAKind) // joker case, return the best
@@ -204,13 +206,16 @@ module Day7 =
                         | None -> failwith "not a full house or four of a kind"
                 | 3 when numberOfJokers = 1 -> match this.FourOfAKindOrFullHouse arrayOfDistinctCards with
                                                                                     | Some(kind) -> kind
-                                                                                    | None -> failwith "not a three of a kind or two pair"        
+                                                                                    | None -> failwith "not a three of a kind or two pair"
+                | 3 when numberOfJokers = 2 -> HandType.FourOfAKind
+                | 3 when numberOfJokers = 3 -> HandType.FourOfAKind
                 | 3 -> match this.ThreeOfAKindOrTwoPairs arrayOfDistinctCards with
                         | Some(kind) -> kind
                         | None -> failwith "not a three of a kind or two pair"
                 | 4 when numberOfJokers = 1  -> match this.ThreeOfAKindOrTwoPairs arrayOfDistinctCards with
                                                                                     | Some(kind) -> kind
-                                                                                    | None -> failwith "not a three of a kind or two pair"     
+                                                                                    | None -> failwith "not a three of a kind or two pair"
+                | 4 when numberOfJokers = 2  -> HandType.ThreeOfAKind   
                 | 4 -> HandType.OnePair
                 | 5 when numberOfJokers = 1 -> HandType.OnePair
                 | _ -> HandType.HighCard
