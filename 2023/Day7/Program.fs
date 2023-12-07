@@ -61,6 +61,20 @@ module Day7 =
                 | 4 -> HandType.OnePair
                 | _ -> HandType.HighCard
                 
+            member this.GetAbsoluteRank : int64 =
+                // idea, use bitwise operation to generate the absolute ranking of the hand
+                // there are five types, and then each card goes from 2-14, so it should be mappable to a
+                // 6 * 8bit -> 48 bit number
+                // X A B C D E
+                // X -> the Hand type from 0->1
+                // A -> The first card
+                // B -> The second card
+                // C -> The third card
+                // D -> the fourth card
+                // E -> the fifth card
+                // since the hand type is the main value, it's first, and then the tie breaker happens from the first card and so on
+                0
+                
         end
     
     let RunStarOne (filePath:string) : int = 0
