@@ -22,6 +22,18 @@ module Day8 =
             new  (positionName:string, numberOfSteps:uint64) = {PositionName = positionName; NumberOfSteps = numberOfSteps}
             member this.HasEnded : bool = this.PositionName.EndsWith("Z") 
         end
+        
+    let rec GCD (x:uint64) (y:uint64) =
+        if y = 0uL then
+            x
+        else
+            GCD y (x%y)
+    
+    let GetGreatestCommonDivisor(numbers:array<uint64>) : uint64 =
+        numbers |> Array.reduce(GCD) 
+    
+    let GetLeastCommonMultiple(numbers:array<uint64>) : uint64 =
+        numbers |> Array.reduce(fun x y -> x*y/(GCD x y)) 
     
     let DirectionSequence(input:string) : seq<Direction> =
         let charNumber = input.Length
@@ -61,19 +73,6 @@ module Day8 =
         let endPosition = SearchEndPosition directionsSequence currentPosition map
         endPosition.NumberOfSteps
     
-    let rec GCD (x:uint64) (y:uint64) =
-        if y = 0uL then
-            x
-        else
-            GCD y (x%y)
-    
-    let GetGreatestCommonDivisor(numbers:array<uint64>) : uint64 =
-        numbers |> Array.reduce(GCD) 
-    
-    let GetLeastCommonMultiple(numbers:array<uint64>) : uint64 =
-        numbers |> Array.reduce(fun x y -> x*y/(GCD x y)) 
-                       
-    
     let RunStarTwo (filePath:string) : uint64 =
         let directions = ReadData filePath |> Seq.head
         let directionsSequence = DirectionSequence directions
@@ -86,31 +85,6 @@ module Day8 =
                             )
             |> Seq.toArray
             |> GetLeastCommonMultiple
-    
-    let RunStarTwoBruteForce (filePath:string) : int =
-        let directions = ReadData filePath |> Seq.head
-        let directionsSequence = DirectionSequence directions
-        let map = ReadData filePath |> Seq.skip(2) |> GetMaps
-        let mutable count = 0
-        let mutable currentPositions = map.Keys |> Seq.where(fun x -> x.EndsWith("A")) |> Seq.toArray
-        let mutable foundZZZ = false
-        let enumerator = directionsSequence.GetEnumerator()
-        while not foundZZZ do
-            count <- count + 1
-            let possibleDestinations = currentPositions |> Array.Parallel.map(fun x-> map.Item x)
-            if enumerator.MoveNext() then
-                currentPositions <- match enumerator.Current with
-                                    | Direction.Left -> possibleDestinations |> Array.Parallel.map(fun x -> let (l,_) = x
-                                                                                                            l)
-                                    | Direction.Right -> possibleDestinations |> Array.Parallel.map(fun x -> let (_,r) = x
-                                                                                                             r)
-                                    | _ -> failwith "unknown direction"
-            else
-                failwith "no more sequence"
-            foundZZZ <- currentPositions |>Array.forall(fun x -> x.EndsWith("Z"))
-                
-            
-        count
         
     
 
