@@ -409,8 +409,14 @@ let ``Day 7 star 1 test get Hand types jokers works FullHouse`` () =
 [<Fact>]
 [<Trait("Category","Day 8")>]
 let ``Day 8 star 1 test Data`` () =
-    let result = Day8.RunStarOne @".\ValidationData7-1.txt"
-    Assert.Equal(0, result)
+    let result = Day8.RunStarOne @".\ValidationData8-1.txt"
+    Assert.Equal(2, result)
+    
+[<Fact>]
+[<Trait("Category","Day 8")>]
+let ``Day 8 star 1 test Data 2`` () =
+    let result = Day8.RunStarOne @".\ValidationData8-1.2.txt"
+    Assert.Equal(6, result)
     
 
 [<Fact>]
@@ -418,6 +424,29 @@ let ``Day 8 star 1 test Data`` () =
 let ``Day 8 star 2 test Data`` () =
     let result = Day8.RunStarTwo @".\ValidationData7-2.txt"
     Assert.Equal(0, result)
+    
+[<Fact>]
+[<Trait("Category","Day 8")>]
+let ``Day 8 test direction sequence works`` () =
+    let result = Day8.DirectionSequence("RLRRLRLL")
+    let repeatedSequenceArray  =  result |> Seq.take(16) |> Seq.toArray
+    Assert.Equal(Day8.Direction.Right, repeatedSequenceArray.[0])
+    Assert.Equal(Day8.Direction.Left, repeatedSequenceArray.[1])
+    Assert.Equal(Day8.Direction.Right, repeatedSequenceArray.[2])
+    Assert.Equal(Day8.Direction.Right, repeatedSequenceArray.[3])
+    Assert.Equal(Day8.Direction.Left, repeatedSequenceArray.[4])
+    Assert.Equal(Day8.Direction.Right, repeatedSequenceArray.[5])
+    Assert.Equal(Day8.Direction.Left, repeatedSequenceArray.[6])
+    Assert.Equal(Day8.Direction.Left, repeatedSequenceArray.[7])
+    Assert.Equal(Day8.Direction.Right, repeatedSequenceArray.[8])
+    Assert.Equal(Day8.Direction.Left, repeatedSequenceArray.[9])
+    Assert.Equal(Day8.Direction.Right, repeatedSequenceArray.[10])
+    Assert.Equal(Day8.Direction.Right, repeatedSequenceArray.[11])
+    Assert.Equal(Day8.Direction.Left, repeatedSequenceArray.[12])
+    Assert.Equal(Day8.Direction.Right, repeatedSequenceArray.[13])
+    Assert.Equal(Day8.Direction.Left, repeatedSequenceArray.[14])
+    Assert.Equal(Day8.Direction.Left, repeatedSequenceArray.[15])
+    
     
     
 [<Fact>]

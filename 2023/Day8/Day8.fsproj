@@ -13,6 +13,9 @@
       <Content Include="MyData.txt">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
+      <Content Include="ValidationData8-1.2.txt">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
       <Content Include="ValidationData8-1.txt">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
