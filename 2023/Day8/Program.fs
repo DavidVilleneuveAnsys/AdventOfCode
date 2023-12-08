@@ -81,9 +81,8 @@ module Day8 =
         currentPositions |> Array.map(fun startingPosition ->
                                             let mutable currentPosition = startingPosition
                                             let mutable count = 0uL
-                                            let mutable foundZZZ = false
-                                            while not foundZZZ do
-                                                
+                                            let mutable foundEndsWithZ = false
+                                            while not foundEndsWithZ do
                                                 count <- count + 1uL
                                                 let (left, right) = map.Item currentPosition
                                                 if enumerator.MoveNext() then
@@ -93,7 +92,7 @@ module Day8 =
                                                                         | _ -> failwith "unknown direction"
                                                 else
                                                     failwith "no more sequence"
-                                                foundZZZ <- currentPosition.EndsWith("Z")
+                                                foundEndsWithZ <- currentPosition.EndsWith("Z")
                                             count
         ) |> GetLeastCommonMultiple
         
