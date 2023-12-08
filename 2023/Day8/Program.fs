@@ -14,6 +14,14 @@ module Day8 =
     type Direction =
         | Left = 0
         | Right = 1
+        
+    type CurrentPosition =
+        struct
+            val PositionName:string
+            val NumberOfSteps:uint64
+            new  (positionName:string, numberOfSteps:uint64) = {PositionName = positionName; NumberOfSteps = numberOfSteps}
+            member this.HasEnded : bool = this.PositionName.EndsWith("Z") 
+        end
     
     let DirectionSequence(input:string) : seq<Direction> =
         let charNumber = input.Length
@@ -27,6 +35,16 @@ module Day8 =
                             |_ -> failwith "Unknown direction"
         }
         
+    let SearchEndPosition (directionSequence:seq<Direction>) (startingPosition:string) (map:Dictionary<string,string*string>) : CurrentPosition =
+        (CurrentPosition(startingPosition,0uL),directionSequence)
+        ||> Seq.scan(fun currentPosition direction ->
+                        let (left, right) = map.Item currentPosition.PositionName
+                        match direction with
+                                | Direction.Left -> CurrentPosition(left,currentPosition.NumberOfSteps+1uL)
+                                | Direction.Right -> CurrentPosition(right,currentPosition.NumberOfSteps+1uL)
+                                | _ -> failwith "unknown direction")
+        |> Seq.find(fun x -> x.HasEnded)
+        
     let GetMaps(input:seq<string>) : Dictionary<string, string*string> =
         let dict = new Dictionary<string, string*string>()
         let rx = Regex(@"[A-Z1-2]{3}", RegexOptions.Compiled)
@@ -35,28 +53,13 @@ module Day8 =
             dict.Add(matches.Item(0).Value,(matches.Item(1).Value,matches.Item(2).Value))
         dict
     
-    let RunStarOne (filePath:string) : int =
+    let RunStarOne (filePath:string) : uint64 =
         let directions = ReadData filePath |> Seq.head
         let directionsSequence = DirectionSequence directions
         let map = ReadData filePath |> Seq.skip(2) |> GetMaps
-        let mutable count = 0
-        let mutable currentPosition = "AAA"
-        let mutable foundZZZ = false
-        let enumerator = directionsSequence.GetEnumerator()
-        while not foundZZZ do
-            count <- count + 1
-            let (left, right) = map.Item currentPosition
-            if enumerator.MoveNext() then
-                currentPosition <- match enumerator.Current with
-                                    | Direction.Left -> left
-                                    | Direction.Right -> right
-                                    | _ -> failwith "unknown direction"
-            else
-                failwith "no more sequence"
-            foundZZZ <- currentPosition = "ZZZ"
-                
-            
-        count
+        let currentPosition = "AAA"
+        let endPosition = SearchEndPosition directionsSequence currentPosition map
+        endPosition.NumberOfSteps
     
     let rec GCD (x:uint64) (y:uint64) =
         if y = 0uL then
@@ -69,34 +72,20 @@ module Day8 =
     
     let GetLeastCommonMultiple(numbers:array<uint64>) : uint64 =
         numbers |> Array.reduce(fun x y -> x*y/(GCD x y)) 
-        
+                       
     
     let RunStarTwo (filePath:string) : uint64 =
         let directions = ReadData filePath |> Seq.head
         let directionsSequence = DirectionSequence directions
         let map = ReadData filePath |> Seq.skip(2) |> GetMaps
         let currentPositions = map.Keys |> Seq.where(fun x -> x.EndsWith("A")) |> Seq.toArray
-        let enumerator = directionsSequence.GetEnumerator()
-        
-        currentPositions |> Array.map(fun startingPosition ->
-                                            let mutable currentPosition = startingPosition
-                                            let mutable count = 0uL
-                                            let mutable foundEndsWithZ = false
-                                            while not foundEndsWithZ do
-                                                count <- count + 1uL
-                                                let (left, right) = map.Item currentPosition
-                                                if enumerator.MoveNext() then
-                                                    currentPosition <- match enumerator.Current with
-                                                                        | Direction.Left -> left
-                                                                        | Direction.Right -> right
-                                                                        | _ -> failwith "unknown direction"
-                                                else
-                                                    failwith "no more sequence"
-                                                foundEndsWithZ <- currentPosition.EndsWith("Z")
-                                            count
-        ) |> GetLeastCommonMultiple
-        
-    
+        currentPositions
+            |> Seq.map(fun startingPosition ->
+                            let endingPosition = SearchEndPosition directionsSequence startingPosition map
+                            endingPosition.NumberOfSteps
+                            )
+            |> Seq.toArray
+            |> GetLeastCommonMultiple
     
     let RunStarTwoBruteForce (filePath:string) : int =
         let directions = ReadData filePath |> Seq.head
