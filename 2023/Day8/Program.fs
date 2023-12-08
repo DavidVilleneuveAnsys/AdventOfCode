@@ -29,7 +29,7 @@ module Day8 =
         
     let GetMaps(input:seq<string>) : Dictionary<string, string*string> =
         let dict = new Dictionary<string, string*string>()
-        let rx = Regex(@"[A-Z]{3}", RegexOptions.Compiled)
+        let rx = Regex(@"[A-Z1-2]{3}", RegexOptions.Compiled)
         for l in input do
             let matches = rx.Matches(l)
             dict.Add(matches.Item(0).Value,(matches.Item(1).Value,matches.Item(2).Value))
@@ -59,7 +59,31 @@ module Day8 =
         count
             
     
-    let RunStarTwo (filePath:string) : int = 0 
+    
+    let RunStarTwo (filePath:string) : int =
+        let directions = ReadData filePath |> Seq.head
+        let directionsSequence = DirectionSequence directions
+        let map = ReadData filePath |> Seq.skip(2) |> GetMaps
+        let mutable count = 0
+        let mutable currentPositions = map.Keys |> Seq.where(fun x -> x.EndsWith("A")) |> Seq.toArray
+        let mutable foundZZZ = false
+        let enumerator = directionsSequence.GetEnumerator()
+        while not foundZZZ do
+            count <- count + 1
+            let possibleDestinations = currentPositions |> Array.Parallel.map(fun x-> map.Item x)
+            if enumerator.MoveNext() then
+                currentPositions <- match enumerator.Current with
+                                    | Direction.Left -> possibleDestinations |> Array.Parallel.map(fun x -> let (l,_) = x
+                                                                                                            l)
+                                    | Direction.Right -> possibleDestinations |> Array.Parallel.map(fun x -> let (_,r) = x
+                                                                                                             r)
+                                    | _ -> failwith "unknown direction"
+            else
+                failwith "no more sequence"
+            foundZZZ <- currentPositions |>Array.forall(fun x -> x.EndsWith("Z"))
+                
+            
+        count
         
     
 

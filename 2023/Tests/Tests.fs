@@ -422,8 +422,8 @@ let ``Day 8 star 1 test Data 2`` () =
 [<Fact>]
 [<Trait("Category","Day 8")>]
 let ``Day 8 star 2 test Data`` () =
-    let result = Day8.RunStarTwo @".\ValidationData7-2.txt"
-    Assert.Equal(0, result)
+    let result = Day8.RunStarTwo @".\ValidationData8-2.txt"
+    Assert.Equal(6, result)
     
 [<Fact>]
 [<Trait("Category","Day 8")>]
