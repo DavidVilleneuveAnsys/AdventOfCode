@@ -57,10 +57,49 @@ module Day8 =
                 
             
         count
-            
+    
+    let rec GCD (x:uint64) (y:uint64) =
+        if y = 0uL then
+            x
+        else
+            GCD y (x%y)
+    
+    let GetGreatestCommonDivisor(numbers:array<uint64>) : uint64 =
+        numbers |> Array.reduce(GCD) 
+    
+    let GetLeastCommonMultiple(numbers:array<uint64>) : uint64 =
+        numbers |> Array.reduce(fun x y -> x*y/(GCD x y)) 
+        
+    
+    let RunStarTwo (filePath:string) : uint64 =
+        let directions = ReadData filePath |> Seq.head
+        let directionsSequence = DirectionSequence directions
+        let map = ReadData filePath |> Seq.skip(2) |> GetMaps
+        let currentPositions = map.Keys |> Seq.where(fun x -> x.EndsWith("A")) |> Seq.toArray
+        let enumerator = directionsSequence.GetEnumerator()
+        
+        currentPositions |> Array.map(fun startingPosition ->
+                                            let mutable currentPosition = startingPosition
+                                            let mutable count = 0uL
+                                            let mutable foundZZZ = false
+                                            while not foundZZZ do
+                                                
+                                                count <- count + 1uL
+                                                let (left, right) = map.Item currentPosition
+                                                if enumerator.MoveNext() then
+                                                    currentPosition <- match enumerator.Current with
+                                                                        | Direction.Left -> left
+                                                                        | Direction.Right -> right
+                                                                        | _ -> failwith "unknown direction"
+                                                else
+                                                    failwith "no more sequence"
+                                                foundZZZ <- currentPosition.EndsWith("Z")
+                                            count
+        ) |> GetLeastCommonMultiple
+        
     
     
-    let RunStarTwo (filePath:string) : int =
+    let RunStarTwoBruteForce (filePath:string) : int =
         let directions = ReadData filePath |> Seq.head
         let directionsSequence = DirectionSequence directions
         let map = ReadData filePath |> Seq.skip(2) |> GetMaps
