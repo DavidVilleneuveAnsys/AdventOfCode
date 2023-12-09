@@ -460,7 +460,7 @@ let ``Day 9 star 1 test Data`` () =
 [<Trait("Category","Day 9")>]
 let ``Day 9 star 2 test Data`` () =
     let result = Day9.RunStarTwo @".\ValidationData9-2.txt"
-    Assert.Equal(0, result)
+    Assert.Equal(2L, result)
     
 
 [<Theory>]

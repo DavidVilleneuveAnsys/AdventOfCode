@@ -34,12 +34,26 @@ module Day9 =
                                                         let lastItem = x |> Array.last
                                                         acc + lastItem )
         sum
+        
+    let GetLinePreviousNumber(line:string) : int64 =
+        let initialLineValues = GetNumbersFromLine line
+        let intermediateValues = initialLineValues |> Array.unfold(fun x ->
+                                                                    if x |> Array.forall(fun x -> x = 0) then
+                                                                        None
+                                                                    else
+                                                                        let nextArray = GetDiffArray x
+                                                                        Some(x,nextArray)) |> Array.rev
+        let sum = (0L,intermediateValues) ||> Array.fold(fun acc x ->
+                                                        let firstItem = x |> Array.head
+                                                        firstItem - acc )
+        sum
     
     
     let RunStarOne (filePath:string) : int64 =
         ReadData filePath |> Seq.map GetLineNextNumber |> Seq.sum
     
-    let RunStarTwo (filePath:string) : int = 0 
+    let RunStarTwo (filePath:string) : int64 =
+        ReadData filePath |> Seq.map GetLinePreviousNumber |> Seq.sum
         
     
 
