@@ -11,6 +11,10 @@ module Day9 =
             yield sr.ReadLine ()
     }
     
+    let GetLineNextNumber(line:string) : int =
+        0
+    
+    
     let RunStarOne (filePath:string) : int = 0
     
     let RunStarTwo (filePath:string) : int = 0 

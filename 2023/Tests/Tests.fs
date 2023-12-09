@@ -410,13 +410,13 @@ let ``Day 7 star 1 test get Hand types jokers works FullHouse`` () =
 [<Trait("Category","Day 8")>]
 let ``Day 8 star 1 test Data`` () =
     let result = Day8.RunStarOne @".\ValidationData8-1.txt"
-    Assert.Equal(2, result)
+    Assert.Equal(2uL, result)
     
 [<Fact>]
 [<Trait("Category","Day 8")>]
 let ``Day 8 star 1 test Data 2`` () =
     let result = Day8.RunStarOne @".\ValidationData8-1.2.txt"
-    Assert.Equal(6, result)
+    Assert.Equal(6uL, result)
     
 
 [<Fact>]
@@ -453,7 +453,7 @@ let ``Day 8 test direction sequence works`` () =
 [<Trait("Category","Day 9")>]
 let ``Day 9 star 1 test Data`` () =
     let result = Day9.RunStarOne @".\ValidationData7-1.txt"
-    Assert.Equal(0, result)
+    Assert.Equal(114, result)
     
 
 [<Fact>]
@@ -461,6 +461,16 @@ let ``Day 9 star 1 test Data`` () =
 let ``Day 9 star 2 test Data`` () =
     let result = Day9.RunStarTwo @".\ValidationData7-2.txt"
     Assert.Equal(0, result)
+    
+
+[<Theory>]
+[<InlineData("0 3 6 9 12 15",18)>]
+[<InlineData("1 3 6 10 15 21",28)>]
+[<InlineData("10 13 16 21 30 45",68)>]
+[<Trait("Category","Day 9")>]
+let ``Day 9 Get line's next number`` (input:string, expected:int)  =
+    let result = Day9.GetLineNextNumber input
+    Assert.Equal(expected, result)
     
     
 [<Fact>]
@@ -472,6 +482,6 @@ let ``Day 10 star 1 test Data`` () =
 
 [<Fact>]
 [<Trait("Category","Day 10")>]
-let ``Day 9 star 2 test Data`` () =
+let ``Day 10 star 2 test Data`` () =
     let result = Day10.RunStarTwo @".\ValidationData10-2.txt"
     Assert.Equal(0, result)
