@@ -461,3 +461,17 @@ let ``Day 9 star 1 test Data`` () =
 let ``Day 9 star 2 test Data`` () =
     let result = Day9.RunStarTwo @".\ValidationData7-2.txt"
     Assert.Equal(0, result)
+    
+    
+[<Fact>]
+[<Trait("Category","Day 10")>]
+let ``Day 10 star 1 test Data`` () =
+    let result = Day10.RunStarOne @".\ValidationData10-1.txt"
+    Assert.Equal(0, result)
+    
+
+[<Fact>]
+[<Trait("Category","Day 10")>]
+let ``Day 9 star 2 test Data`` () =
+    let result = Day10.RunStarTwo @".\ValidationData10-2.txt"
+    Assert.Equal(0, result)
