@@ -472,6 +472,20 @@ let ``Day 9 Get line's next number`` (input:string, expected:int)  =
     let result = Day9.GetLineNextNumber input
     Assert.Equal(expected, result)
     
+[<Fact>]
+[<Trait("Category","Day 9")>]
+let ``Day 9 Get diff array`` ()  =
+    let result = Day9.GetDiffArray [|0;3;6;9;12;15|]
+    let expected = [|3;3;3;3;3|]
+    Assert.True(expected |> Array.forall2(=) result)
+    
+[<Fact>]
+[<Trait("Category","Day 9")>]
+let ``Day 9 Get diff array 2`` ()  =
+    let result = Day9.GetDiffArray [|2;3;4;5;6|]
+    let expected = [|1;1;1;1|]
+    Assert.True(expected |> Array.forall2(=) result)
+    
     
 [<Fact>]
 [<Trait("Category","Day 10")>]

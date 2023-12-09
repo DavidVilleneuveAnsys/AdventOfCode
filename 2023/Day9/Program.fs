@@ -11,11 +11,33 @@ module Day9 =
             yield sr.ReadLine ()
     }
     
+    let GetNumbersFromLine (line:string) : array<int> =
+        let rx = Regex(@"\d+", RegexOptions.Compiled)
+        line |> rx.Matches |> Seq.map(fun x -> x.Value |> int) |> Seq.toArray
+        
+        
+    let GetDiffArray (line:array<int>) : array<int>  =
+        let emptyArray = Array.empty<int>
+        (emptyArray, line |> Array.pairwise) ||> Array.fold(fun acc x -> let (first, second) = x
+                                                                         let diff = second-first
+                                                                         acc |> Array.append [|diff|]) 
+    
     let GetLineNextNumber(line:string) : int =
-        0
+        let initialLineValues = GetNumbersFromLine line
+        let intermediateValues = initialLineValues |> Array.unfold(fun x ->
+                                                                    if x |> Array.forall(fun x -> x = 0) then
+                                                                        None
+                                                                    else
+                                                                        let nextArray = GetDiffArray x
+                                                                        Some(x,nextArray)) |> Array.rev
+        let sum = (0,intermediateValues) ||> Array.fold(fun acc x ->
+                                                        let lastItem = x |> Array.last
+                                                        acc + lastItem )
+        sum
     
     
-    let RunStarOne (filePath:string) : int = 0
+    let RunStarOne (filePath:string) : int =
+        ReadData filePath |> Seq.map GetLineNextNumber |> Seq.sum
     
     let RunStarTwo (filePath:string) : int = 0 
         
