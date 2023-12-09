@@ -452,14 +452,14 @@ let ``Day 8 test direction sequence works`` () =
 [<Fact>]
 [<Trait("Category","Day 9")>]
 let ``Day 9 star 1 test Data`` () =
-    let result = Day9.RunStarOne @".\ValidationData7-1.txt"
+    let result = Day9.RunStarOne @".\ValidationData9-1.txt"
     Assert.Equal(114, result)
     
 
 [<Fact>]
 [<Trait("Category","Day 9")>]
 let ``Day 9 star 2 test Data`` () =
-    let result = Day9.RunStarTwo @".\ValidationData7-2.txt"
+    let result = Day9.RunStarTwo @".\ValidationData9-2.txt"
     Assert.Equal(0, result)
     
 
