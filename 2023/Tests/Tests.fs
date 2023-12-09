@@ -453,7 +453,7 @@ let ``Day 8 test direction sequence works`` () =
 [<Trait("Category","Day 9")>]
 let ``Day 9 star 1 test Data`` () =
     let result = Day9.RunStarOne @".\ValidationData9-1.txt"
-    Assert.Equal(114, result)
+    Assert.Equal(114L, result)
     
 
 [<Fact>]
@@ -468,7 +468,7 @@ let ``Day 9 star 2 test Data`` () =
 [<InlineData("1 3 6 10 15 21",28)>]
 [<InlineData("10 13 16 21 30 45",68)>]
 [<Trait("Category","Day 9")>]
-let ``Day 9 Get line's next number`` (input:string, expected:int)  =
+let ``Day 9 Get line's next number`` (input:string, expected:int64)  =
     let result = Day9.GetLineNextNumber input
     Assert.Equal(expected, result)
     
@@ -476,14 +476,28 @@ let ``Day 9 Get line's next number`` (input:string, expected:int)  =
 [<Trait("Category","Day 9")>]
 let ``Day 9 Get diff array`` ()  =
     let result = Day9.GetDiffArray [|0;3;6;9;12;15|]
-    let expected = [|3;3;3;3;3|]
+    let expected = [|3L;3L;3L;3L;3L|]
     Assert.True(expected |> Array.forall2(=) result)
     
 [<Fact>]
 [<Trait("Category","Day 9")>]
 let ``Day 9 Get diff array 2`` ()  =
     let result = Day9.GetDiffArray [|2;3;4;5;6|]
-    let expected = [|1;1;1;1|]
+    let expected = [|1L;1L;1L;1L|]
+    Assert.True(expected |> Array.forall2(=) result)
+    
+[<Fact>]
+[<Trait("Category","Day 9")>]
+let ``Day 9 Get diff array negative 1`` ()  =
+    let result = Day9.GetDiffArray [|-6;-5;-4;-3;-2|]
+    let expected = [|1L;1L;1L;1L|]
+    Assert.True(expected |> Array.forall2(=) result)
+    
+[<Fact>]
+[<Trait("Category","Day 9")>]
+let ``Day 9 Get diff array negative 2`` ()  =
+    let result = Day9.GetDiffArray [|-2;-3;-4;-5;-6|]
+    let expected = [|-1L;-1L;-1L;-1L|]
     Assert.True(expected |> Array.forall2(=) result)
     
     

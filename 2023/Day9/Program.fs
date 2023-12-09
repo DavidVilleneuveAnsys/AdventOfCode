@@ -12,7 +12,7 @@ module Day9 =
     }
     
     let GetNumbersFromLine (line:string) : array<int64> =
-        let rx = Regex(@"\d+", RegexOptions.Compiled)
+        let rx = Regex(@"\-{0,1}\d+", RegexOptions.Compiled)
         line |> rx.Matches |> Seq.map(fun x -> x.Value |> int64) |> Seq.toArray
         
         
