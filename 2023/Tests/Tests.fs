@@ -504,8 +504,26 @@ let ``Day 9 Get diff array negative 2`` ()  =
 [<Fact>]
 [<Trait("Category","Day 10")>]
 let ``Day 10 star 1 test Data`` () =
-    let result = Day10.RunStarOne @".\ValidationData10-1.txt"
-    Assert.Equal(0, result)
+    let result = Day10.RunStarOne @".\ValidationData10-1.1.txt"
+    Assert.Equal(4, result)
+    
+[<Fact>]
+[<Trait("Category","Day 10")>]
+let ``Day 10 star 1 test Data2`` () =
+    let result = Day10.RunStarOne @".\ValidationData10-1.2.txt"
+    Assert.Equal(4, result)
+    
+[<Fact>]
+[<Trait("Category","Day 10")>]
+let ``Day 10 star 1 test Data3`` () =
+    let result = Day10.RunStarOne @".\ValidationData10-1.3.txt"
+    Assert.Equal(8, result)
+    
+[<Fact>]
+[<Trait("Category","Day 10")>]
+let ``Day 10 star 1 test Data4`` () =
+    let result = Day10.RunStarOne @".\ValidationData10-1.4.txt"
+    Assert.Equal(8, result)
     
 
 [<Fact>]
@@ -513,3 +531,19 @@ let ``Day 10 star 1 test Data`` () =
 let ``Day 10 star 2 test Data`` () =
     let result = Day10.RunStarTwo @".\ValidationData10-2.txt"
     Assert.Equal(0, result)
+    
+    
+    
+[<Fact>]
+[<Trait("Category","Day 11")>]
+let ``Day 11 star 1 test Data`` () =
+    let result = Day11.RunStarOne @".\ValidationData10-1.txt"
+    Assert.Equal(0, result)
+    
+
+[<Fact>]
+[<Trait("Category","Day 11")>]
+let ``Day 11 star 2 test Data`` () =
+    let result = Day11.RunStarTwo @".\ValidationData10-2.txt"
+    Assert.Equal(0, result)
+    
